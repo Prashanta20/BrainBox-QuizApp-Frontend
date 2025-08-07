@@ -9,8 +9,6 @@ const MCreateAccountForm = ({ className = "" }) => {
     navigate(path);
   };
 
-  // complete
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -23,6 +21,8 @@ const MCreateAccountForm = ({ className = "" }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Commented out backend call
+  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -51,6 +51,13 @@ const MCreateAccountForm = ({ className = "" }) => {
     // set the session variable to the email
     const { email } = formData;
     sessionStorage.setItem("email", email);
+  };
+  */
+
+  // New handleSubmit: just navigate to home (or wherever you want)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/home");
   };
 
   return (

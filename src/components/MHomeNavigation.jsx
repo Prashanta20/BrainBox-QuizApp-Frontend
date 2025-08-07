@@ -1,6 +1,34 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
+
+// Example local questions array
+const QUESTIONS = [
+  {
+    question_number: 1,
+    question: "What is the capital of France?",
+    options: ["Paris", "London", "Berlin", "Madrid"],
+    correct_answer: "1",
+  },
+  {
+    question_number: 2,
+    question: "Which planet is known as the Red Planet?",
+    options: ["Earth", "Mars", "Jupiter", "Venus"],
+    correct_answer: "2",
+  },
+  {
+    question_number: 3,
+    question: "Who wrote 'Hamlet'?",
+    options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"],
+    correct_answer: "2",
+  },
+  {
+    question_number: 4,
+    question: "What is the largest ocean on Earth?",
+    options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+    correct_answer: "4",
+  },
+];
 
 const MHomeNavigation = ({
   className = "",
@@ -31,53 +59,49 @@ const MHomeNavigation = ({
 
   const resetBack = () => {
     for (let i = 1; i < 5; i++) {
-      document.getElementById(`back${i}`).style.background = "black";
+      const el = document.getElementById(`back${i}`);
+      if (el) el.style.background = "black";
     }
   };
 
-  const fetchQuestion = useCallback(async () => {
-    const num = Math.floor(Math.random() * 82) + 1;
-    try {
-      const response = await fetch(`http://localhost:5000/api/question/${num}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching question: ${response.statusText}`);
-      }
-      const data = await response.json();
-      console.log(data);
-      // Update state with the data received from the API
-      setQuestion({
-        question_number: data.question_number,
-        question: data.question,
-        options: data.options,
-        correct_answer: data.correct_answer,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  // Use local questions instead of backend
+  const fetchQuestion = () => {
+    const idx = Math.floor(Math.random() * QUESTIONS.length);
+    const data = QUESTIONS[idx];
+    setQuestion({
+      question_number: data.question_number,
+      question: data.question,
+      options: data.options,
+      correct_answer: data.correct_answer,
+    });
+  };
 
   useEffect(() => {
     // if its the question page
-    const loadQuestion = async () => {
+    const loadQuestion = () => {
       if (showButton4) {
-        await fetchQuestion();
+        fetchQuestion();
       }
     };
     loadQuestion();
-  }, [fetchQuestion, showButton4]);
+    // eslint-disable-next-line
+  }, [showButton4]);
 
   useEffect(() => {
-    if (showButton4) {
-      console.log("Updated question state:", question); // Log updated state
-
+    if (showButton4 && question.options.length) {
       // update the text for the questions
-      document.getElementById("option1").textContent = question.options[0];
-      document.getElementById("option2").textContent = question.options[1];
-      document.getElementById("option3").textContent = question.options[2];
-      document.getElementById("option4").textContent = question.options[3];
-      document.getElementById("text").textContent = question.question;
+      const o1 = document.getElementById("option1");
+      const o2 = document.getElementById("option2");
+      const o3 = document.getElementById("option3");
+      const o4 = document.getElementById("option4");
+      const t = document.getElementById("text");
+      if (o1) o1.textContent = question.options[0];
+      if (o2) o2.textContent = question.options[1];
+      if (o3) o3.textContent = question.options[2];
+      if (o4) o4.textContent = question.options[3];
+      if (t) t.textContent = question.question;
     }
-  }, [question]);
+  }, [question, showButton4]);
 
   const handleClick = (path) => {
     if (option1 === "Practice") {
@@ -98,15 +122,17 @@ const MHomeNavigation = ({
   const questionClick = (choice) => {
     // if they chose same as correct answer
     if (question.correct_answer == choice) {
-      document.getElementById(`back${choice}`).style.background = "green";
+      const el = document.getElementById(`back${choice}`);
+      if (el) el.style.background = "green";
     } else {
-      // if the chose different answer
-      document.getElementById(`back${choice}`).style.background = "red";
+      // if they chose different answer
+      const el = document.getElementById(`back${choice}`);
+      if (el) el.style.background = "red";
     }
     // Fetch a new question after 1.5 seconds
-    setTimeout(async () => {
+    setTimeout(() => {
       resetBack();
-      await fetchQuestion();
+      fetchQuestion();
     }, 1500);
   };
 

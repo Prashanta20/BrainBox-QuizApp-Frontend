@@ -19,6 +19,8 @@ const MLogInInput = ({ className = "" }) => {
     navigate(path);
   };
 
+  // Commented out backend calls
+  /*
   const fetchUserInfo = async () => {
     if (formData.email) {
       try {
@@ -27,7 +29,7 @@ const MLogInInput = ({ className = "" }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: formData.email }), // Pass the email in the body
+          body: JSON.stringify({ email: formData.email }),
         });
 
         const contentType = response.headers.get("content-type");
@@ -37,7 +39,7 @@ const MLogInInput = ({ className = "" }) => {
 
         const data = await response.json();
         if (response.ok) {
-          sessionStorage.setItem("profile", JSON.stringify(data)); // Store the entire response
+          sessionStorage.setItem("profile", JSON.stringify(data));
         } else {
           console.error("Error:", data.msg);
         }
@@ -60,11 +62,8 @@ const MLogInInput = ({ className = "" }) => {
       const data = await response.json();
       if (response.ok) {
         console.log("Logged In:", data);
-
-        // get the full user and store them to the session storage
         await fetchUserInfo();
-
-        navigate("/home"); // Redirect to some path on success
+        navigate("/home");
       } else {
         console.error("Error registering user:", data.message);
         document.getElementById("login-text").textContent =
@@ -72,10 +71,17 @@ const MLogInInput = ({ className = "" }) => {
         document.getElementById("login-text").style.color = "red";
         document.getElementById("login-text").style.fontWeight = "bold";
       }
-      console.log(data); // Handle the response data as needed
+      console.log(data);
     } catch (error) {
       console.error("Error logging in:", error);
     }
+  };
+  */
+
+  // New handleSubmit: just navigate to /home
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/home");
   };
 
   return (

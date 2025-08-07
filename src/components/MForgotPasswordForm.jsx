@@ -21,6 +21,8 @@ const MForgotPasswordForm = ({ className = "" }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Commented out backend call and password check
+  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -88,6 +90,13 @@ const MForgotPasswordForm = ({ className = "" }) => {
       document.getElementById("reset-text").style.color = "red";
       document.getElementById("reset-text").style.fontWeight = "bold";
     }
+  };
+  */
+
+  // New handleSubmit: just navigate to home (or wherever you want)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/home");
   };
 
   return (
